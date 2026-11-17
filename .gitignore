@@ -1,3 +1,7 @@
 *.vvp
 *.vcd
 tb_cpu
+output_files/
+db/
+incremental_db/
+*.qws

@@ -1,0 +1,3 @@
+# Projeto Quartus - Mini_CPU (DE2-115)
+QUARTUS_VERSION = "20.1"
+PROJECT_REVISION = "mini_cpu"
