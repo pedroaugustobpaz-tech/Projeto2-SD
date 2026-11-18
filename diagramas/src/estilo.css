@@ -1,0 +1,16 @@
+body{margin:0;background:#fff;font-family:"DejaVu Sans",Arial,sans-serif}
+svg text{font-family:"DejaVu Sans",Arial,sans-serif}
+.box{fill:#EEF3FB;stroke:#3A5A8C;stroke-width:1.6}
+.ctl{fill:#DCEBF2;stroke:#1F5F7A;stroke-width:1.8}
+.ext{fill:#F2F2F2;stroke:#555;stroke-width:1.6}
+.data{stroke:#222;stroke-width:1.8;fill:none}
+.T{stroke:#1E5BB8;stroke-width:1.6;fill:none}
+.S{stroke:#C46A00;stroke-width:1.6;fill:none;stroke-dasharray:6 3}
+.t{font-size:12px;fill:#222}
+.b{font-weight:bold}
+.h{font-size:14px;font-weight:bold;fill:#111}
+.lab{font-size:11px;fill:#333}
+.labT{font-size:11px;fill:#1E5BB8}
+.labS{font-size:11px;fill:#C46A00}
+.it{font-style:italic;fill:#3A5A8C;font-size:12px}
+.red{font-style:italic;fill:#B03030;font-size:13px}

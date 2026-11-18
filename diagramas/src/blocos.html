@@ -1,0 +1,155 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="estilo.css"></head><body>
+<svg id="fig" width="1340" height="830" viewBox="0 0 1340 830" xmlns="http://www.w3.org/2000/svg">
+<defs>
+ <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#222"/></marker>
+ <marker id="aT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1E5BB8"/></marker>
+ <marker id="aS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#C46A00"/></marker>
+</defs>
+<rect width="1340" height="830" fill="#fff"/>
+<text x="670" y="32" text-anchor="middle" class="h" style="font-size:20px">Mini_CPU — diagrama de blocos</text>
+
+<!-- regiao da unidade de processamento -->
+<path d="M130,52 H1280 V520 H600 V380 H130 Z" fill="none" stroke="#B03030" stroke-width="1.6" stroke-dasharray="7 4"/>
+<text x="142" y="72" class="red">Unidade de processamento da informação</text>
+
+<!-- entrada SW -->
+<text x="20" y="168" class="it">Entrada</text>
+<text x="20" y="186" class="t b">SW[17:0]</text>
+<line x1="20" y1="195" x2="168" y2="195" class="data" marker-end="url(#a)"/>
+
+<!-- IR -->
+<rect x="170" y="150" width="140" height="90" rx="6" class="box"/>
+<text x="240" y="180" text-anchor="middle" class="h">IR</text>
+<text x="240" y="200" text-anchor="middle" class="t">registrador de</text>
+<text x="240" y="216" text-anchor="middle" class="t">instrução (18 bits)</text>
+<line x1="310" y1="195" x2="348" y2="195" class="data" marker-end="url(#a)"/>
+<text x="318" y="187" class="lab">ir</text>
+
+<!-- decodificacao -->
+<rect x="350" y="140" width="180" height="110" rx="6" class="box"/>
+<text x="440" y="172" text-anchor="middle" class="h">Separação</text>
+<text x="440" y="190" text-anchor="middle" class="h">de campos</text>
+<text x="440" y="212" text-anchor="middle" class="t">(combinacional)</text>
+<text x="440" y="230" text-anchor="middle" class="lab">um único trecho de assign</text>
+
+<!-- enderecos -->
+<line x1="530" y1="185" x2="598" y2="185" class="data" marker-end="url(#a)"/>
+<text x="536" y="152" class="lab">addr_a</text>
+<text x="536" y="165" class="lab">addr_b</text>
+<text x="536" y="178" class="lab">addr_w</text>
+
+<!-- memoria -->
+<rect x="600" y="120" width="200" height="160" rx="6" class="box"/>
+<text x="700" y="154" text-anchor="middle" class="h">memory.v</text>
+<text x="700" y="178" text-anchor="middle" class="t">Banco de registradores</text>
+<text x="700" y="196" text-anchor="middle" class="t">16 × 16 bits (R0 … R15)</text>
+<text x="700" y="218" text-anchor="middle" class="lab">leitura síncrona</text>
+<text x="700" y="234" text-anchor="middle" class="lab">(dado sai 1 ciclo depois)</text>
+
+<!-- data_a / data_b -->
+<line x1="800" y1="170" x2="878" y2="170" class="data" marker-end="url(#a)"/>
+<text x="810" y="162" class="lab">data_a</text>
+<line x1="800" y1="235" x2="878" y2="235" class="data" marker-end="url(#a)"/>
+<text x="810" y="227" class="lab">data_b</text>
+
+<!-- ULA -->
+<rect x="880" y="130" width="170" height="140" rx="6" class="box"/>
+<text x="965" y="162" text-anchor="middle" class="h">module_alu.v</text>
+<text x="965" y="186" text-anchor="middle" class="t b" style="font-size:16px">ULA  + − ×</text>
+<text x="965" y="210" text-anchor="middle" class="lab">LOAD ADD ADDI SUB</text>
+<text x="965" y="225" text-anchor="middle" class="lab">SUBI MUL CLEAR DISPLAY</text>
+<text x="965" y="248" text-anchor="middle" class="lab">(combinacional)</text>
+<line x1="1050" y1="200" x2="1108" y2="200" class="data" marker-end="url(#a)"/>
+<text x="1056" y="192" class="lab">result</text>
+
+<!-- RES -->
+<rect x="1110" y="160" width="130" height="80" rx="6" class="box"/>
+<text x="1175" y="190" text-anchor="middle" class="h">RES</text>
+<text x="1175" y="208" text-anchor="middle" class="t">resultado</text>
+<text x="1175" y="224" text-anchor="middle" class="t">(16 bits)</text>
+
+<!-- realimentacao data_in -->
+<path d="M1175,160 V95 H700 V118" class="data" marker-end="url(#a)"/>
+<text x="940" y="88" text-anchor="middle" class="lab">data_in (o resultado é gravado no registrador de destino)</text>
+
+<!-- barramento opcode / imediato -->
+<path d="M440,250 V310 H965 V272" class="data" marker-end="url(#a)"/>
+<text x="880" y="328" class="lab">opcode, imm_sinal, imm_mod</text>
+<path d="M860,310 V393" class="data" marker-end="url(#a)"/>
+<text x="866" y="372" class="lab">opcode, reg_num</text>
+
+<!-- RES -> bin2bcd -->
+<line x1="1175" y1="240" x2="1175" y2="398" class="data" marker-end="url(#a)"/>
+<text x="1181" y="330" class="lab">valor</text>
+
+<!-- bin2bcd -->
+<rect x="1090" y="400" width="150" height="80" rx="6" class="box"/>
+<text x="1165" y="430" text-anchor="middle" class="h">bin2bcd.v</text>
+<text x="1165" y="450" text-anchor="middle" class="t">sinal + 5 dígitos</text>
+<text x="1165" y="466" text-anchor="middle" class="lab">(combinacional)</text>
+<line x1="1090" y1="440" x2="1022" y2="440" class="data" marker-end="url(#a)"/>
+<text x="1028" y="432" class="lab">negativo</text>
+<text x="1028" y="456" class="lab">d4 … d0</text>
+
+<!-- lcd_display -->
+<rect x="800" y="395" width="220" height="100" rx="6" class="box"/>
+<text x="910" y="423" text-anchor="middle" class="h">lcd_display.v</text>
+<text x="910" y="441" text-anchor="middle" class="lab">+ lcd_init_hd44780.v</text>
+<text x="910" y="460" text-anchor="middle" class="t">monta e envia as 2 linhas</text>
+<text x="910" y="476" text-anchor="middle" class="lab">(FSM própria, 34 bytes, 1 ms/byte)</text>
+
+<!-- saida LCD -->
+<line x1="800" y1="445" x2="522" y2="445" class="data" marker-end="url(#a)"/>
+<text x="528" y="437" class="lab">LCD_DATA</text>
+<text x="528" y="461" class="lab">RS, RW, EN</text>
+<rect x="290" y="410" width="230" height="70" rx="6" class="ext"/>
+<text x="405" y="440" text-anchor="middle" class="h">LCD 16×2</text>
+<text x="405" y="460" text-anchor="middle" class="lab">(HD44780 da DE2-115)</text>
+<text x="290" y="500" class="it">Saída</text>
+
+<!-- unidade de controle -->
+<rect x="200" y="600" width="1040" height="130" rx="8" class="ctl"/>
+<text x="720" y="630" text-anchor="middle" class="h" style="font-size:16px">Unidade de controle — FSM (module_mini_cpu.v)</text>
+<text x="720" y="656" text-anchor="middle" class="t">DESLIGADO → INICIAR → PRONTO → BUSCA → LEITURA → EXECUÇÃO → ESCRITA → MOSTRAR → ESPERA LCD → PRONTO</text>
+<text x="720" y="676" text-anchor="middle" class="t">soltar ligar em PRONTO: DESLIGAR → ESPERA LCD → DESLIGADO</text>
+<text x="720" y="704" text-anchor="middle" class="lab">rst = ~KEY[0]   ·   τ (clock) = CLOCK_50, 50 MHz, comum a todos os registradores</text>
+
+<!-- detector de soltura -->
+<rect x="20" y="615" width="150" height="100" rx="6" class="ctl"/>
+<text x="95" y="640" text-anchor="middle" class="t b">Detector</text>
+<text x="95" y="656" text-anchor="middle" class="t b">de soltura</text>
+<text x="95" y="680" text-anchor="middle" class="lab">ligar_solto</text>
+<text x="95" y="696" text-anchor="middle" class="lab">enviar_solto</text>
+<line x1="170" y1="665" x2="198" y2="665" class="data" marker-end="url(#a)"/>
+<line x1="60" y1="775" x2="60" y2="717" class="data" marker-end="url(#a)"/>
+<line x1="130" y1="775" x2="130" y2="717" class="data" marker-end="url(#a)"/>
+<text x="60" y="790" text-anchor="middle" class="t b">KEY[3]</text>
+<text x="130" y="790" text-anchor="middle" class="t b">KEY[2]</text>
+<text x="20" y="812" class="it">Entrada de controle</text>
+
+<!-- sinais de controle T -->
+<line x1="240" y1="600" x2="240" y2="243" class="T" marker-end="url(#aT)"/>
+<text x="248" y="292" class="labT">carrega IR</text>
+<text x="248" y="306" class="labT">(S_BUSCA)</text>
+<line x1="690" y1="600" x2="690" y2="283" class="T" marker-end="url(#aT)"/>
+<text x="696" y="590" class="labT">we</text>
+<line x1="750" y1="600" x2="750" y2="283" class="T" marker-end="url(#aT)"/>
+<text x="756" y="590" class="labT">clr</text>
+<line x1="900" y1="600" x2="900" y2="498" class="T" marker-end="url(#aT)"/>
+<text x="906" y="590" class="labT">start, modo</text>
+<path d="M1240,665 H1300 V200 H1243" class="T" marker-end="url(#aT)"/>
+<text x="1312" y="430" class="labT" transform="rotate(90 1312 430)" text-anchor="middle">carrega RES (S_EXECUCAO)</text>
+
+<!-- status S -->
+<line x1="620" y1="310" x2="620" y2="597" class="S" marker-end="url(#aS)"/>
+<text x="626" y="590" class="labS">opcode</text>
+<line x1="980" y1="495" x2="980" y2="597" class="S" marker-end="url(#aS)"/>
+<text x="986" y="590" class="labS">busy</text>
+
+<!-- legenda -->
+<g transform="translate(800,760)">
+ <line x1="0" y1="0" x2="40" y2="0" class="data" marker-end="url(#a)"/><text x="48" y="4" class="lab">dados</text>
+ <line x1="120" y1="0" x2="160" y2="0" class="T" marker-end="url(#aT)"/><text x="168" y="4" class="labT">controle (T)</text>
+ <line x1="280" y1="0" x2="320" y2="0" class="S" marker-end="url(#aS)"/><text x="328" y="4" class="labS">status (S)</text>
+</g>
+</svg></body></html>
