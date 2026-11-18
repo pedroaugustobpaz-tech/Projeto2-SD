@@ -1,0 +1,24 @@
+digraph fsm_lcd_init {
+  graph [label=<<b>FSM da inicialização do LCD — lcd_init_hd44780.v</b><br/><font point-size="11">Comandos enviados em ordem: 0x38 → 0x0C → 0x01 → 0x06 (rs = 0, rw = 0)</font>>,
+         labelloc=t, fontname="DejaVu Sans", fontsize=16, rankdir=TB, nodesep=0.7, ranksep=0.6, pad=0.3, bgcolor=white];
+  node  [shape=box, style="rounded,filled", fillcolor="#EEF3FB", color="#3A5A8C", fontname="DejaVu Sans", fontsize=11, penwidth=1.4];
+  edge  [fontname="DejaVu Sans", fontsize=10, color="#444444", arrowsize=0.8];
+
+  rst [shape=point, width=0.12, color="#444444"];
+  POWER [label=<<b>S_POWER</b><br/>espera a energização<br/>(1 000 000 ciclos = 20 ms)>, fillcolor="#E6E6E6", color="#555555"];
+  SETUP [label=<<b>S_SETUP</b><br/>lcd_data ← comando[cmd_index]<br/>E ← 1>];
+  PULSE [label=<<b>S_PULSE</b><br/>E = 1 por 25 ciclos (500 ns)<br/>depois E ← 0>];
+  HOLD  [label=<<b>S_HOLD</b><br/>espera 100 000 ciclos (2 ms)>];
+  DONE  [label=<<b>S_DONE</b><br/>done = 1>, fillcolor="#E3F4E6", color="#2E7D4F"];
+
+  rst -> POWER [label="  rst"];
+  POWER -> POWER [label="  count < 20 ms"];
+  POWER -> SETUP [label="  passaram 20 ms"];
+  SETUP -> PULSE;
+  PULSE -> PULSE [label="  count < 25"];
+  PULSE -> HOLD [label="  count = 25"];
+  HOLD -> HOLD [label="  count < 2 ms"];
+  HOLD -> SETUP [label="  passaram 2 ms e\n  cmd_index < 3\n  (cmd_index ← cmd_index + 1)"];
+  HOLD -> DONE [label="  passaram 2 ms e\n  cmd_index = 3", color="#2E7D4F", fontcolor="#2E7D4F"];
+  DONE -> DONE [label="  até o próximo rst"];
+}

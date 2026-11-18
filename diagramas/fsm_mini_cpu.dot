@@ -1,0 +1,41 @@
+digraph fsm_mini_cpu {
+  graph [label=<<b>FSM do controle — module_mini_cpu.v</b><br/><font point-size="11">Dentro do estado: ações (saídas). Nas setas: condição de transição.</font>>,
+         labelloc=t, fontname="DejaVu Sans", fontsize=16, rankdir=TB, nodesep=0.6, ranksep=0.55, pad=0.3, bgcolor=white];
+  node  [shape=box, style="rounded,filled", fillcolor="#EEF3FB", color="#3A5A8C", fontname="DejaVu Sans", fontsize=11, penwidth=1.4];
+  edge  [fontname="DejaVu Sans", fontsize=10, color="#444444", arrowsize=0.8];
+
+  rst [shape=point, width=0.12, color="#444444"];
+  DESLIGADO [label=<<b>S_DESLIGADO</b><br/>nada acontece<br/>(enviar é ignorado)>, fillcolor="#E6E6E6", color="#555555"];
+  INICIAR   [label=<<b>S_INICIAR</b><br/>espera busy = 0<br/>start = 1, modo ← INICIAL>];
+  PRONTO    [label=<<b>S_PRONTO</b><br/>espera um botão>, fillcolor="#E3F4E6", color="#2E7D4F"];
+  BUSCA     [label=<<b>S_BUSCA</b><br/>ir ← SW>, fillcolor="#FFF4DD", color="#B07A12"];
+  LEITURA   [label=<<b>S_LEITURA</b><br/>endereços na memória<br/>(1 ciclo de espera)>, fillcolor="#FFF4DD", color="#B07A12"];
+  EXECUCAO  [label=<<b>S_EXECUCAO</b><br/>res ← result (ALU)>, fillcolor="#FFF4DD", color="#B07A12"];
+  ESCRITA   [label=<<b>S_ESCRITA</b><br/>we = 1 (exceto CLEAR/DISPLAY)<br/>clr = 1 (só no CLEAR)>, fillcolor="#FFF4DD", color="#B07A12"];
+  MOSTRAR   [label=<<b>S_MOSTRAR</b><br/>start = 1<br/>modo ← COMPLETO (SO_NOME no CLEAR)<br/>volta_desl ← 0>];
+  ESP1      [label=<<b>S_ESPERA_LCD1</b><br/>1 ciclo para busy subir>];
+  ESP2      [label=<<b>S_ESPERA_LCD2</b><br/>espera busy = 0>];
+  DESLIGAR  [label=<<b>S_DESLIGAR</b><br/>clr = 1, start = 1<br/>modo ← APAGADO, res ← 0<br/>volta_desl ← 1>, fillcolor="#FBE9E7", color="#A63D2F"];
+
+  rst -> DESLIGADO [label="  rst (KEY[0])"];
+  DESLIGADO -> DESLIGADO [label="  ligar_solto = 0"];
+  DESLIGADO -> INICIAR [label="  ligar_solto"];
+  INICIAR -> INICIAR [label="  busy = 1"];
+  INICIAR -> ESP1 [label="  busy = 0\n  (volta_desl ← 0)"];
+  PRONTO -> PRONTO [label="  nenhum botão"];
+  PRONTO -> BUSCA [label="  enviar_solto"];
+  PRONTO -> DESLIGAR [label="  ligar_solto"];
+  BUSCA -> LEITURA;
+  LEITURA -> EXECUCAO;
+  EXECUCAO -> ESCRITA;
+  ESCRITA -> MOSTRAR;
+  MOSTRAR -> ESP1;
+  DESLIGAR -> ESP1;
+  ESP1 -> ESP2;
+  ESP2 -> ESP2 [label="  busy = 1"];
+  ESP2 -> PRONTO [label="  busy = 0 e\n  volta_desl = 0", color="#2E7D4F", fontcolor="#2E7D4F"];
+  ESP2 -> DESLIGADO [label="  busy = 0 e\n  volta_desl = 1", color="#A63D2F", fontcolor="#A63D2F"];
+
+
+  {rank=same; BUSCA; DESLIGAR;}
+}

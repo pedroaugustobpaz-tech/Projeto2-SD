@@ -1,0 +1,25 @@
+digraph fsm_lcd_display {
+  graph [label=<<b>FSM do LCD — lcd_display.v</b><br/><font point-size="11">busy = 1 em todo estado diferente de S_IDLE. Cada pedido envia 34 bytes (índices 0 a 33).</font>>,
+         labelloc=t, fontname="DejaVu Sans", fontsize=16, rankdir=TB, nodesep=0.7, ranksep=0.6, pad=0.3, bgcolor=white];
+  node  [shape=box, style="rounded,filled", fillcolor="#EEF3FB", color="#3A5A8C", fontname="DejaVu Sans", fontsize=11, penwidth=1.4];
+  edge  [fontname="DejaVu Sans", fontsize=10, color="#444444", arrowsize=0.8];
+
+  rst [shape=point, width=0.12, color="#444444"];
+  WAIT_INIT [label=<<b>S_WAIT_INIT</b><br/>LCD controlado pelo lcd_init_hd44780<br/>busy = 1>, fillcolor="#E6E6E6", color="#555555"];
+  IDLE      [label=<<b>S_IDLE</b><br/>busy = 0<br/>espera start>, fillcolor="#E3F4E6", color="#2E7D4F"];
+  PREPARE   [label=<<b>S_PREPARE</b><br/>lcd_data ← byte(msg_index)<br/>rs = 0 nos índices 0 e 17, 1 nos demais<br/>E = 0>];
+  PULSE_E   [label=<<b>S_PULSE_E</b><br/>E = 1 por DELAY_PULSE ciclos<br/>(25 ciclos = 500 ns)>];
+  WAIT      [label=<<b>S_WAIT</b><br/>E = 0 por DELAY_WRITE ciclos<br/>(50 000 ciclos = 1 ms)>];
+
+  rst -> WAIT_INIT [label="  rst"];
+  WAIT_INIT -> WAIT_INIT [label="  init_done = 0"];
+  WAIT_INIT -> IDLE [label="  init_done = 1"];
+  IDLE -> IDLE [label="  start = 0"];
+  IDLE -> PREPARE [label="  start = 1\n  (msg_index ← 0)"];
+  PREPARE -> PULSE_E [label="  (count ← 0)"];
+  PULSE_E -> PULSE_E [label="  count < DELAY_PULSE − 1"];
+  PULSE_E -> WAIT [label="  count = DELAY_PULSE − 1"];
+  WAIT -> WAIT [label="  count < DELAY_WRITE − 1"];
+  WAIT -> PREPARE [label="  fim da espera e\n  msg_index < 33\n  (msg_index ← msg_index + 1)"];
+  WAIT -> IDLE [label="  fim da espera e\n  msg_index = 33", color="#2E7D4F", fontcolor="#2E7D4F"];
+}
